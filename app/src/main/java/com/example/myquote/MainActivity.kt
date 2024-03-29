@@ -1,5 +1,6 @@
 package com.example.myquote
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getRandomQuote()
+
+        binding.btnAllQuotes.setOnClickListener {
+            startActivity(Intent(this@MainActivity, ListQuotesActivity::class.java))
+        }
     }
 
     private fun getRandomQuote() {
@@ -30,7 +35,11 @@ class MainActivity : AppCompatActivity() {
         val client = AsyncHttpClient()
         val url = "https://quote-api.dicoding.dev/random"
         client.get(url, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(statusCode: Int, headers: Array<Header>, responseBody: ByteArray) {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<Header>,
+                responseBody: ByteArray
+            ) {
                 // Jika koneksi berhasil
                 binding.progressBar.visibility = View.INVISIBLE
                 val result = String(responseBody)
@@ -48,7 +57,12 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<Header>,
+                responseBody: ByteArray,
+                error: Throwable
+            ) {
                 // Jika koneksi gagal
                 binding.progressBar.visibility = View.INVISIBLE
                 val errorMessage = when (statusCode) {
